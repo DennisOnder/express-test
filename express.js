@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const Joi = require('joi');
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
@@ -36,15 +37,20 @@ app.get('/api/courses/:id', (req, res) => {
 });
 
 app.post('/api/courses', (req, res) => {
-  if (!req.body.name || req.body.name.length < 3) {
-    res.status(400).send('Invalid name.');
+  const schema = {
+    name: Joi.string().min(3).required()
+  };
+  const result = Joi.validate(req.body, schema);
+  if (result.error) {
+    res.status(400).send(result.error.details[0].message);
+  } else {
+    const course = {
+      id: courses.length + 1,
+      name: req.body.name
+    }
+    courses.push(course);
+    res.send(course);
   }
-  const course = {
-    id: courses.length + 1,
-    name: req.body.name
-  }
-  courses.push(course);
-  res.send(course);
 });
 
 app.listen(port, () => console.log('Listening on port:' + port));
