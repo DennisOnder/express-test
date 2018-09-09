@@ -4,7 +4,9 @@
   "description": "",
   "main": "express.js",
   "scripts": {
-    "server": "nodemon express.js"
+    "server": "nodemon express.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,7 @@
   },
   "homepage": "https://github.com/DennisOnder/express-test#readme",
   "dependencies": {
+    "concurrently": "^4.0.1",
     "express": "^4.16.3",
     "joi": "^13.6.0"
   },

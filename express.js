@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const Joi = require('joi');
 const port = process.env.PORT || 5000;
+const router = express.Router();
 
 app.use(express.json());
 
@@ -21,14 +22,14 @@ const courses = [
 ];
 
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  console.log('Root');
 });
 
-app.get('/api/courses', (req, res) => {
+router.get('/api/courses', (req, res) => {
   res.send(courses);
 });
 
-app.get('/api/courses/:id', (req, res) => {
+router.get('/api/courses/:id', (req, res) => {
   const course = courses.find(course => course.id === parseInt(req.params.id));
   if (!course) {
     res.status(404).json({ notFound: 'Course not found.' });
@@ -36,7 +37,7 @@ app.get('/api/courses/:id', (req, res) => {
   res.send(course);  
 });
 
-app.post('/api/courses', (req, res) => {
+router.post('/api/courses', (req, res) => {
   const schema = {
     name: Joi.string().min(3).required()
   };
@@ -53,7 +54,7 @@ app.post('/api/courses', (req, res) => {
   }
 });
 
-app.put('/api/courses/:id', (req, res) => {
+router.put('/api/courses/:id', (req, res) => {
   const course = courses.find(course => course.id === parseInt(req.params.id));
   if (!course) {
     res.status(404).json({ notFound: 'Course not found.' });
